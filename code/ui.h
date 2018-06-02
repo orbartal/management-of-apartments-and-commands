@@ -1,6 +1,10 @@
-#ifndef UI_H_   /* Include guard */
+#ifndef UI_H_
 #define UI_H_
 
-int ui_welcome_message();
+#include <stdio.h>
+#include <stdlib.h>
 
-#endif // PARSER_H_#pragma once
+int ui_welcome_message();
+int ui_read_command(char* line, size_t line_max_length);
+
+#endif

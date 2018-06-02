@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "ui.h"  /* Include the header (not strictly necessary here) */
+#include "ui.h"
 
 int ui_welcome_message() {
 	printf("Please enter one of the following commands :\n");
@@ -9,4 +9,17 @@ int ui_welcome_message() {
 	printf("To exit, enter exit.");
 	getchar();
 	return 0;
+}
+
+int ui_read_command(char* line, size_t line_max_length) {
+	char *read_result = NULL;
+	printf("\nEnter string below [ctrl + d] to quit\n");
+	read_result = fgets(line, line_max_length, stdin);
+	if (read_result == NULL) {
+		printf("Error\n");
+	}
+	else {
+		printf("\nline : %s\n", line);
+	}
+	return (read_result == NULL);
 }

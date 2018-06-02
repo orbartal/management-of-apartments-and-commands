@@ -1,7 +1,14 @@
-#include "ui.h"  /* Include the header here, to obtain the function declaration */
+#include "ui.h"
 
-int main() //int argc, char **argv
+#define MAX_LINE_LENGTH 1024
+
+int main()
 {
+	size_t line_max_length = 1024;
+	char *line = malloc(sizeof(char)*line_max_length);
 	ui_welcome_message();
+	ui_read_command(line, line_max_length);
+	free(line);
+	getchar();
 	return 0;
 }
