@@ -5,9 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include <time.h>
 #include "errors.h"
+#include "list.h"
 
 typedef struct enteranceDate
 {
@@ -29,21 +29,9 @@ typedef struct apt
 	//EnteranceDate enterDate;
 }Apt;
 
-typedef struct aptListNode
-{
-	Apt* data;
-	struct AptlistNode* next;
-	struct AptlistNode* prev;
-}AptListNode;
-
-typedef struct aptList
-{
-	AptListNode* head;
-	AptListNode* tail;
-}AptList;
-
-void apartments_list_init(struct aptList* apartments);
-void apartments_list_free(struct aptList* apartments);
-void apartments_print_one(struct apt* apartment);
+void apartments_print_one_node(struct ListNode* apartment);
+void apartments_print_one_apartment(struct apt* apartment);
+void apartments_print_entire_list(struct LinkedList* p_apartments_list);
+void apartments_add_new_apartment(struct apt* p_new_apartment, struct LinkedList* p_apartments_list);
 
 #endif

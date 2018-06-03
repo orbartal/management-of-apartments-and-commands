@@ -105,7 +105,7 @@ int arguments_index_in_command_line(char* input, size_t input_max_length, size_t
 	return 	METHOD_SUCCESS;
 }
 
-int set_command_type(const char* input, size_t input_max_length, size_t* index_array, struct command* output) {
+int set_command_type(char* input, size_t input_max_length, size_t* index_array, struct command* output) {
 	int result = 0;
 	size_t command_name_length = index_array[0]+1; //index start from zero.
 	char *command_name = malloc(sizeof(char)*(command_name_length+1));

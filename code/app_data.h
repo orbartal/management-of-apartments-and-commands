@@ -11,7 +11,7 @@ typedef struct appDATA
 {
 	struct apt* apt_temp; //TODO: remove
 	int last_apartment_code;
-	struct aptList* apartments;
+	struct LinkedList* apartments;
 }appDATA;
 
 int app_data_init(struct appDATA* p_app_data);

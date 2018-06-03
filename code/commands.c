@@ -1,7 +1,7 @@
 #include "commands.h"
 
 void command_print_add_apartment_command(struct addApartmentCommand* input);
-void command_add_apartment_execute(struct p_app_dATA* appData, struct addApartmentCommand* input);
+int command_add_apartment_execute(struct appDATA* p_app_data, struct addApartmentCommand* p_command);
 
 int command_free(struct command* input) {
 	if (input->type == ADD_APT_COMMAND_TYPE) {
@@ -10,6 +10,7 @@ int command_free(struct command* input) {
 		free(arguments->address);
 	}
 	free(input);
+	return METHOD_SUCCESS;
 }
 void command_print(struct command* input) {
 	if (input->type == ADD_APT_COMMAND_TYPE) {
@@ -36,7 +37,7 @@ int command_execute(struct appDATA* p_app_data, struct command* command) {
 	return METHOD_FAILURE;
 }
 
-void command_add_apartment_execute(struct appDATA* p_app_data, struct addApartmentCommand* p_command) {
+int command_add_apartment_execute(struct appDATA* p_app_data, struct addApartmentCommand* p_command) {
 	struct apt* p_new_apt = malloc(sizeof(struct apt));
 	error_if_condition_true_print_and_exit((p_new_apt == NULL), "malloc return NULL on 'p_new_apt' in 'commands.c'");
 	p_new_apt->address = malloc(sizeof(char)*p_command->address_size);
@@ -54,6 +55,7 @@ void command_add_apartment_execute(struct appDATA* p_app_data, struct addApartme
 	p_new_apt->day = p_command->day;
 	p_new_apt->month = p_command->month;
 	p_new_apt->year = p_command->year;
-	p_app_data->apt_temp = p_new_apt;
+	p_app_data->apt_temp = p_new_apt; //TODO: remove
+	apartments_add_new_apartment(p_new_apt, p_app_data->apartments);
 	return METHOD_SUCCESS;
 }
