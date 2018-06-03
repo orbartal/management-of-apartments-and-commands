@@ -7,11 +7,13 @@
 #include "apartments.h"
 #include "errors.h"
 
-#define ADD_APT_COMMAND_TYPE 1
+enum CommandType {
+	CommandTypeAddApartment
+};
 
 typedef struct Command
 {
-	int type;
+	enum CommandType type;
 	void* arguments;
 }Command;
 

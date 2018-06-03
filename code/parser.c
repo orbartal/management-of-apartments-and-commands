@@ -3,7 +3,7 @@
 size_t count_arguments_in_command_line(char* input, size_t input_max_length);
 int arguments_index_in_command_line(char* input, size_t input_max_length, size_t* output, size_t output_length);
 int set_command_type(char* input, size_t input_max_length, size_t* index_array, struct Command* output);
-int get_command_type_by_command_name(char* command_name);
+enum CommandType get_command_type_by_command_name(char* command_name);
 int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
 int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
 
@@ -113,15 +113,15 @@ int set_command_type(char* input, size_t input_max_length, size_t* index_array, 
 	return result;
 }
 
-int get_command_type_by_command_name(char* command_name) {
+enum CommandType get_command_type_by_command_name(char* command_name) {
 	if (strcmp(command_name, "add-an-apt") == 0) {
-		return ADD_APT_COMMAND_TYPE;
+		return CommandTypeAddApartment;
 	}
 	return METHOD_FAILURE;
 }
 
 int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* p_output) {
-	if (p_output->type == ADD_APT_COMMAND_TYPE) {
+	if (p_output->type == CommandTypeAddApartment) {
 		parse_and_set_add_app_command_arguments(input, input_max_length, index_array, index_array_length, p_output);
 		return METHOD_SUCCESS;
 	}

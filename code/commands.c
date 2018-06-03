@@ -1,10 +1,10 @@
 #include "commands.h"
 
-void command_print_add_apartment_command(struct addApartmentCommand* input);
+void command_print_add_apartment_command(struct AddApartmentCommand* input);
 int command_add_apartment_execute(struct AppDATA* p_app_data, struct AddApartmentCommand* p_command);
 
 int command_free(struct Command* input) {
-	if (input->type == ADD_APT_COMMAND_TYPE) {
+	if (input->type == CommandTypeAddApartment) {
 		struct AddApartmentCommand* arguments = input->arguments;
 		free(arguments->address);
 	}
@@ -12,7 +12,7 @@ int command_free(struct Command* input) {
 	return METHOD_SUCCESS;
 }
 void command_print(struct Command* input) {
-	if (input->type == ADD_APT_COMMAND_TYPE) {
+	if (input->type == CommandTypeAddApartment) {
 		command_print_add_apartment_command((struct AddApartmentCommand*)input->arguments);
 	}
 }
@@ -29,7 +29,7 @@ void command_print_add_apartment_command(struct AddApartmentCommand* input) {
 }
 
 int command_execute(struct AppDATA* p_app_data, struct Command* command) {
-	if (command->type == ADD_APT_COMMAND_TYPE) {
+	if (command->type == CommandTypeAddApartment) {
 		command_add_apartment_execute(p_app_data, command->arguments);
 		return METHOD_SUCCESS;
 	}
