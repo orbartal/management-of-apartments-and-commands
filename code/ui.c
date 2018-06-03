@@ -9,9 +9,9 @@ int ui_welcome_message() {
 	return METHOD_SUCCESS;
 }
 
-int ui_read_command(char* line, size_t line_max_length) {
+int ui_read_command(char* p_line, size_t line_max_length) {
 	char *read_result = NULL;
-	read_result = fgets(line, line_max_length, stdin);
+	read_result = fgets(p_line, line_max_length, stdin);
 	if (read_result == NULL) {
 		return METHOD_FAILURE;
 	}

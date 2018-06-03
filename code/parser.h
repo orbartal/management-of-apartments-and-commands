@@ -9,6 +9,6 @@
 
 #define INT_MAX       2147483647 //In case it is not define
 
-int parse_command(char* line, size_t line_max_length, struct command* result);
+int parse_command(char* line, size_t line_max_length, struct Command* p_output);
 
 #endif

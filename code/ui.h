@@ -6,6 +6,6 @@
 #include "errors.h"
 
 int ui_welcome_message();
-int ui_read_command(char* line, size_t line_max_length);
+int ui_read_command(char* p_line, size_t line_max_length);
 
 #endif

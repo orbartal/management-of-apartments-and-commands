@@ -2,12 +2,12 @@
 
 size_t count_arguments_in_command_line(char* input, size_t input_max_length);
 int arguments_index_in_command_line(char* input, size_t input_max_length, size_t* output, size_t output_length);
-int set_command_type(char* input, size_t input_max_length, size_t* index_array, struct command* output);
+int set_command_type(char* input, size_t input_max_length, size_t* index_array, struct Command* output);
 int get_command_type_by_command_name(char* command_name);
-int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct command* output);
-int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct command* output);
+int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
+int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
 
-int parse_command (char* input, size_t input_max_length, struct command* output) {
+int parse_command (char* input, size_t input_max_length, struct Command* p_output) {
 	int result = 0;
 	size_t *arguments_index = NULL;
 	size_t number_of_arguments = count_arguments_in_command_line(input, input_max_length) + 1;
@@ -21,13 +21,13 @@ int parse_command (char* input, size_t input_max_length, struct command* output)
 		return METHOD_FAILURE;
 	}
 
-	result =  set_command_type(input, input_max_length, arguments_index, output);
+	result =  set_command_type(input, input_max_length, arguments_index, p_output);
 	if (result != METHOD_SUCCESS) {
 		free(arguments_index);
 		return METHOD_FAILURE;
 	}
 
-	result =  parse_and_set_command_arguments(input, input_max_length, arguments_index, number_of_arguments, output);
+	result =  parse_and_set_command_arguments(input, input_max_length, arguments_index, number_of_arguments, p_output);
 	if (result != METHOD_SUCCESS) {
 		free(arguments_index);
 		return METHOD_FAILURE;
@@ -98,7 +98,7 @@ int arguments_index_in_command_line(char* input, size_t input_max_length, size_t
 	return 	METHOD_SUCCESS;
 }
 
-int set_command_type(char* input, size_t input_max_length, size_t* index_array, struct command* output) {
+int set_command_type(char* input, size_t input_max_length, size_t* index_array, struct Command* p_output) {
 	int result = 0;
 	size_t command_name_length = index_array[0]+1; //index start from zero.
 	char *command_name = malloc(sizeof(char)*(command_name_length+1));
@@ -108,7 +108,7 @@ int set_command_type(char* input, size_t input_max_length, size_t* index_array, 
 	if (result!= METHOD_SUCCESS) {
 		return METHOD_FAILURE;
 	}
-	output->type = get_command_type_by_command_name(command_name);
+	p_output->type = get_command_type_by_command_name(command_name);
 	free(command_name);
 	return result;
 }
@@ -120,21 +120,21 @@ int get_command_type_by_command_name(char* command_name) {
 	return METHOD_FAILURE;
 }
 
-int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct command* output) {
-	if (output->type == ADD_APT_COMMAND_TYPE) {
-		parse_and_set_add_app_command_arguments(input, input_max_length, index_array, index_array_length, output);
+int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* p_output) {
+	if (p_output->type == ADD_APT_COMMAND_TYPE) {
+		parse_and_set_add_app_command_arguments(input, input_max_length, index_array, index_array_length, p_output);
 		return METHOD_SUCCESS;
 	}
 	return METHOD_FAILURE;
 }
 
-int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct command* output) {
+int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* p_output) {
 	int result = 0;
 	if (index_array_length!=7) {
 		return METHOD_FAILURE; //Wrong number of arguments for this command.
 	}
-	struct addApartmentCommand* arguments = NULL;
-	arguments = (struct addApartmentCommand*)malloc(sizeof(struct addApartmentCommand));
+	struct AddApartmentCommand* arguments = NULL;
+	arguments = (struct AddApartmentCommand*)malloc(sizeof(struct AddApartmentCommand));
 	error_if_condition_true_print_and_exit((arguments == NULL), "malloc return NULL on 'arguments' in 'parser.c'");
 
 	arguments->address_size = index_array[1] - index_array[0] + 1;
@@ -163,7 +163,7 @@ int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length
 		free(arguments);
 		return METHOD_FAILURE;
 	}
-	arguments->numberOfRooms = (int)long_from_string;
+	arguments->number_of_rooms = (int)long_from_string;
 
 	//day
 	long_from_string = strtol(input + index_array[3] + 2, &p_char_after_number, 10);
@@ -193,7 +193,7 @@ int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length
 	}
 	arguments->year = (int)long_from_string;
 
-	output->arguments = arguments;
+	p_output->arguments = arguments;
 
 	return METHOD_SUCCESS;
 }

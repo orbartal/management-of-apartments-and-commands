@@ -9,25 +9,25 @@
 
 #define ADD_APT_COMMAND_TYPE 1
 
-typedef struct command
+typedef struct Command
 {
 	int type;
 	void* arguments;
-}command;
+}Command;
 
-typedef struct addApartmentCommand
+typedef struct AddApartmentCommand
 {
 	size_t address_size;
 	char* address;
 	int price;
-	int numberOfRooms;
+	int number_of_rooms;
 	short int day;
 	short int month;
 	short int year;
-}addApartmentCommand;
+}AddApartmentCommand;
 
-int command_free(struct command* input);
-void command_print(struct command* input);
-int command_execute(struct AppDATA* appData, struct command* command);
+int command_free(struct Command* input);
+void command_print(struct Command* input);
+int command_execute(struct AppDATA* appData, struct Command* command);
 
 #endif
