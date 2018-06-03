@@ -5,7 +5,6 @@ int command_add_apartment_execute(struct appDATA* p_app_data, struct addApartmen
 
 int command_free(struct command* input) {
 	if (input->type == ADD_APT_COMMAND_TYPE) {
-		//printf("\ncommand_free addApartmentCommand\n");
 		struct addApartmentCommand* arguments = input->arguments;
 		free(arguments->address);
 	}
@@ -38,7 +37,7 @@ int command_execute(struct appDATA* p_app_data, struct command* command) {
 }
 
 int command_add_apartment_execute(struct appDATA* p_app_data, struct addApartmentCommand* p_command) {
-	struct apt* p_new_apt = malloc(sizeof(struct apt));
+	struct Apartment* p_new_apt = malloc(sizeof(struct Apartment));
 	error_if_condition_true_print_and_exit((p_new_apt == NULL), "malloc return NULL on 'p_new_apt' in 'commands.c'");
 	p_new_apt->address = malloc(sizeof(char)*p_command->address_size);
 	error_if_condition_true_print_and_exit((p_new_apt->address == NULL), "malloc return NULL on 'p_new_apt->address' in 'commands.c'");
@@ -55,7 +54,6 @@ int command_add_apartment_execute(struct appDATA* p_app_data, struct addApartmen
 	p_new_apt->day = p_command->day;
 	p_new_apt->month = p_command->month;
 	p_new_apt->year = p_command->year;
-	p_app_data->apt_temp = p_new_apt; //TODO: remove
 	apartments_add_new_apartment(p_new_apt, p_app_data->apartments);
 	return METHOD_SUCCESS;
 }

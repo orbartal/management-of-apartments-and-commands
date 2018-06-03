@@ -9,7 +9,7 @@
 
 typedef struct appDATA
 {
-	struct apt* apt_temp; //TODO: remove
+	struct Apartment* apt_temp; //TODO: remove
 	int last_apartment_code;
 	struct LinkedList* apartments;
 }appDATA;

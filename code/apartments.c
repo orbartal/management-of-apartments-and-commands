@@ -5,10 +5,10 @@ void apartments_print_entire_list(struct LinkedList* p_apartments_list) {
 }
 
 void apartments_print_one_node(struct ListNode* input) {
-	struct apt* apartment = (struct apt*)input->data;
+	struct Apartment* apartment = (struct Apartment*)input->data;
 	apartments_print_one_apartment(apartment);
 }
-void apartments_print_one_apartment(struct apt* input) {
+void apartments_print_one_apartment(struct Apartment* input) {
 	printf("\napartments_print_one:\n");
 	printf("\naddress_code is %d\n", input->code);
 	printf("\naddress_size is %d\n", input->address_size);
@@ -20,7 +20,7 @@ void apartments_print_one_apartment(struct apt* input) {
 	printf("\nyear is %d\n", input->year);
 }
 
-void apartments_add_new_apartment(struct apt* p_new_apartment, struct LinkedList* p_apartments_list) {
+void apartments_add_new_apartment(struct Apartment* p_new_apartment, struct LinkedList* p_apartments_list) {
 	struct ListNode* p_node = NULL;
 	p_node = malloc(sizeof(struct ListNode));
 	error_if_condition_true_print_and_exit((p_node == NULL), "malloc return NULL on 'p_node' in 'apartments.c'");
