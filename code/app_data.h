@@ -7,14 +7,13 @@
 #include "apartments.h"
 
 
-typedef struct appDATA
+typedef struct AppDATA
 {
-	struct Apartment* apt_temp; //TODO: remove
 	int last_apartment_code;
 	struct LinkedList* apartments;
-}appDATA;
+}AppDATA;
 
-int app_data_init(struct appDATA* p_app_data);
-int app_data_free(struct appDATA* p_app_data);
+int app_data_init(struct AppDATA* p_app_data);
+int app_data_free(struct AppDATA* p_app_data);
 
 #endif

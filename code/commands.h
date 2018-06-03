@@ -28,6 +28,6 @@ typedef struct addApartmentCommand
 
 int command_free(struct command* input);
 void command_print(struct command* input);
-int command_execute(struct appDATA* appData, struct command* command);
+int command_execute(struct AppDATA* appData, struct command* command);
 
 #endif

@@ -1,7 +1,7 @@
 #include "commands.h"
 
 void command_print_add_apartment_command(struct addApartmentCommand* input);
-int command_add_apartment_execute(struct appDATA* p_app_data, struct addApartmentCommand* p_command);
+int command_add_apartment_execute(struct AppDATA* p_app_data, struct addApartmentCommand* p_command);
 
 int command_free(struct command* input) {
 	if (input->type == ADD_APT_COMMAND_TYPE) {
@@ -28,7 +28,7 @@ void command_print_add_apartment_command(struct addApartmentCommand* input) {
 	printf("\nyear is %d\n", input->year);
 }
 
-int command_execute(struct appDATA* p_app_data, struct command* command) {
+int command_execute(struct AppDATA* p_app_data, struct command* command) {
 	if (command->type == ADD_APT_COMMAND_TYPE) {
 		command_add_apartment_execute(p_app_data, command->arguments);
 		return METHOD_SUCCESS;
@@ -36,7 +36,7 @@ int command_execute(struct appDATA* p_app_data, struct command* command) {
 	return METHOD_FAILURE;
 }
 
-int command_add_apartment_execute(struct appDATA* p_app_data, struct addApartmentCommand* p_command) {
+int command_add_apartment_execute(struct AppDATA* p_app_data, struct addApartmentCommand* p_command) {
 	struct Apartment* p_new_apt = malloc(sizeof(struct Apartment));
 	error_if_condition_true_print_and_exit((p_new_apt == NULL), "malloc return NULL on 'p_new_apt' in 'commands.c'");
 	p_new_apt->address = malloc(sizeof(char)*p_command->address_size);
