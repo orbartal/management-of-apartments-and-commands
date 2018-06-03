@@ -25,7 +25,5 @@ typedef struct addApartmentCommand
 
 int command_free(struct command* input);
 void command_print(struct command* input);
-void command_print_add_apartment_command(struct command* input);
-
 
 #endif

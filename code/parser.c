@@ -12,7 +12,7 @@ int parse_command (char* input, size_t input_max_length, struct command* output)
 	size_t *arguments_index = NULL;
 	size_t number_of_arguments = count_arguments_in_command_line(input, input_max_length) + 1;
 
-	printf("There are %d words in the line %s\n", number_of_arguments, input);
+	//printf("There are %d words in the line %s\n", number_of_arguments, input);
 	arguments_index = (size_t*)malloc(sizeof(size_t)*(number_of_arguments+1));
 	error_if_condition_true_print_and_exit((arguments_index == NULL), "malloc return NULL on 'arguments_index' in 'parser.c'");
 	arguments_index[number_of_arguments] = '\0';
@@ -22,12 +22,12 @@ int parse_command (char* input, size_t input_max_length, struct command* output)
 		free(arguments_index);
 		return METHOD_FAILURE;
 	}
-
+/*
 	size_t i = 0;
 	for (i = 0; i < number_of_arguments; i++) {
 		printf("Word %d end in index %d\n", i, arguments_index[i]);
 	}
-
+*/
 	result =  set_command_type(input, input_max_length, arguments_index, output);
 	if (result != METHOD_SUCCESS) {
 		free(arguments_index);
@@ -115,7 +115,7 @@ int set_command_type(const char* input, size_t input_max_length, size_t* index_a
 	if (result!= METHOD_SUCCESS) {
 		return METHOD_FAILURE;
 	}
-	printf("\ncommand name is %s\n", command_name);
+	//printf("\ncommand name is %s\n", command_name);
 	output->type = get_command_type_by_command_name(command_name);
 	free(command_name);
 	return result;
@@ -154,7 +154,7 @@ int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length
 		return METHOD_FAILURE;
 	}
 	arguments->address[arguments->address_size - 1] = '\0';
-	printf("\naddress is %s\n", arguments->address);
+	//printf("\naddress is %s\n", arguments->address);
 
 	char *p_char_after_number;
 	long long_from_string;
@@ -164,7 +164,7 @@ int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length
 		return METHOD_FAILURE;
 	}
 	arguments->price = (int)long_from_string;
-	printf("\nprice is %d\n", arguments->price);
+	//printf("\nprice is %d\n", arguments->price);
 
 	//numberOfRooms
 	long_from_string = strtol(input + index_array[2] + 2, &p_char_after_number, 10);
@@ -174,7 +174,7 @@ int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length
 		return METHOD_FAILURE;
 	}
 	arguments->numberOfRooms = (int)long_from_string;
-	printf("\nnumberOfRooms is %d\n", arguments->numberOfRooms);
+	//printf("\nnumberOfRooms is %d\n", arguments->numberOfRooms);
 
 	//day
 	long_from_string = strtol(input + index_array[3] + 2, &p_char_after_number, 10);
@@ -184,7 +184,7 @@ int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length
 		return METHOD_FAILURE;
 	}
 	arguments->day = (int)long_from_string;
-	printf("\nday is %d\n", arguments->day);
+	//printf("\nday is %d\n", arguments->day);
 
 	//month
 	long_from_string = strtol(input + index_array[4] + 2, &p_char_after_number, 10);
@@ -194,7 +194,7 @@ int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length
 		return METHOD_FAILURE;
 	}
 	arguments->month = (int)long_from_string;
-	printf("\nmonth is %d\n", arguments->month);
+	//printf("\nmonth is %d\n", arguments->month);
 
 	//year
 	long_from_string = strtol(input + index_array[5] + 2, &p_char_after_number, 10);
@@ -205,7 +205,7 @@ int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length
 		return METHOD_FAILURE;
 	}
 	arguments->year = (int)long_from_string;
-	printf("\nyear is %d\n", arguments->year);
+	//printf("\nyear is %d\n", arguments->year);
 
 	output->arguments = arguments;
 

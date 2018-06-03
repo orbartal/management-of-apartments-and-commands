@@ -1,5 +1,7 @@
 #include "commands.h"
 
+void command_print_add_apartment_command(struct addApartmentCommand* input);
+
 int command_free(struct command* input) {
 	if (input->type == ADD_APT_COMMAND_TYPE) {
 		//printf("\ncommand_free addApartmentCommand\n");
