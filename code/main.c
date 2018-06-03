@@ -21,17 +21,14 @@ int main()
 
 	ui_welcome_message();
 
-	while (1) {
+	while (p_command->type!= CommandTypeAddExit) {
 		result = ui_read_command(p_line, line_max_length);
 		error_if_condition_true_print_and_exit((result != METHOD_SUCCESS), "method ui_read_command return -1. called from 'main.c'");
-		if (strcmp(p_line, "exit\n") == 0) {
-			break;
-		}
+
 		result = parse_command(p_line, line_max_length, p_command);
 		error_if_condition_true_print_and_exit((result != METHOD_SUCCESS), "method parse_command return -1. called from 'main.c'");
 
 		command_execute(p_app_data, p_command);
-		apartments_print_entire_list(p_app_data->apartments);
 	}
 	free(p_line);
 	command_free(p_command);

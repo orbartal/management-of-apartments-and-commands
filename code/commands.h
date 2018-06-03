@@ -8,7 +8,9 @@
 #include "errors.h"
 
 enum CommandType {
-	CommandTypeAddApartment
+	CommandTypeAddApartment,
+	CommandTypeGetApartments,
+	CommandTypeAddExit
 };
 
 typedef struct Command

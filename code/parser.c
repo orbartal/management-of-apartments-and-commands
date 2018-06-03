@@ -117,12 +117,24 @@ enum CommandType get_command_type_by_command_name(char* command_name) {
 	if (strcmp(command_name, "add-an-apt") == 0) {
 		return CommandTypeAddApartment;
 	}
+	if (strcmp(command_name, "get-an-apt") == 0) {
+		return CommandTypeGetApartments;
+	}
+	if (strcmp(command_name, "exit") == 0) {
+		return CommandTypeAddExit;
+	}
 	return METHOD_FAILURE;
 }
 
 int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* p_output) {
 	if (p_output->type == CommandTypeAddApartment) {
 		parse_and_set_add_app_command_arguments(input, input_max_length, index_array, index_array_length, p_output);
+		return METHOD_SUCCESS;
+	}
+	if (p_output->type == CommandTypeGetApartments) {
+		return METHOD_SUCCESS;
+	}
+	if (p_output->type == CommandTypeAddExit) {
 		return METHOD_SUCCESS;
 	}
 	return METHOD_FAILURE;

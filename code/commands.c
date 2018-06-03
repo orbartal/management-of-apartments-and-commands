@@ -33,6 +33,14 @@ int command_execute(struct AppDATA* p_app_data, struct Command* command) {
 		command_add_apartment_execute(p_app_data, command->arguments);
 		return METHOD_SUCCESS;
 	}
+	if (command->type == CommandTypeGetApartments) {
+		apartments_print_entire_list(p_app_data->apartments);
+		return METHOD_SUCCESS;
+	}
+	if (command->type == CommandTypeAddExit) {
+		//TODO
+		return METHOD_SUCCESS;
+	}
 	return METHOD_FAILURE;
 }
 
