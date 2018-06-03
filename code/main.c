@@ -27,6 +27,8 @@ int main()
 	error_if_condition_true_print_and_exit((result != METHOD_SUCCESS), "method parse_command return -1. called from 'main.c'");
 
 	command_print(p_command);
+	command_execute(p_app_data, p_command);
+	apartments_print_one(p_app_data->apt_temp);
 	command_free(p_command);
 	free(line);
 	app_data_free(p_app_data);

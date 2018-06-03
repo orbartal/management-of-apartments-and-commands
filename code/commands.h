@@ -3,6 +3,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "app_data.h"
+#include "apartments.h"
+#include "errors.h"
 
 #define ADD_APT_COMMAND_TYPE 1
 
@@ -25,6 +28,6 @@ typedef struct addApartmentCommand
 
 int command_free(struct command* input);
 void command_print(struct command* input);
-//int command_execute(struct command* command, struct appDATA* data);
+int command_execute(struct appDATA* appData, struct command* command);
 
 #endif

@@ -19,13 +19,14 @@ typedef struct enteranceDate
 typedef struct apt
 {
 	int code;
-	char *adress;
+	size_t address_size;
+	char *address;
 	int price;
-	short int roomNum;
+	short int number_Of_rooms;
 	short int day;
 	short int month;
 	short int year;
-	EnteranceDate enterDate;
+	//EnteranceDate enterDate;
 }Apt;
 
 typedef struct aptListNode
@@ -43,5 +44,6 @@ typedef struct aptList
 
 void apartments_list_init(struct aptList* apartments);
 void apartments_list_free(struct aptList* apartments);
+void apartments_print_one(struct apt* apartment);
 
 #endif

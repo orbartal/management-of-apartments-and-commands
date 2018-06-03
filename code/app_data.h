@@ -9,6 +9,8 @@
 
 typedef struct appDATA
 {
+	struct apt* apt_temp; //TODO: remove
+	int last_apartment_code;
 	struct aptList* apartments;
 }appDATA;
 
