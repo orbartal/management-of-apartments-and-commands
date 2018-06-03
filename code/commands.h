@@ -1,6 +1,9 @@
 #ifndef COMMAND_H_
 #define COMMAND_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #define ADD_APT_COMMAND_TYPE 1
 
 typedef struct command
@@ -19,5 +22,10 @@ typedef struct addApartmentCommand
 	short int month;
 	short int year;
 }addApartmentCommand;
+
+int command_free(struct command* input);
+void command_print(struct command* input);
+void command_print_add_apartment_command(struct command* input);
+
 
 #endif

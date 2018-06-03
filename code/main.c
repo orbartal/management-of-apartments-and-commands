@@ -16,11 +16,13 @@ int main()
 
 	ui_welcome_message();
 	result = ui_read_command(line, line_max_length);
-	error_if_condition_true_print_and_exit((result < 0), "method ui_read_command return -1. called from 'main.c'");
+	error_if_condition_true_print_and_exit((result != METHOD_SUCCESS), "method ui_read_command return -1. called from 'main.c'");
 
 	result =  parse_command(line, line_max_length, p_command);
-	error_if_condition_true_print_and_exit((result < 0), "method parse_command return -1. called from 'main.c'");
+	error_if_condition_true_print_and_exit((result != METHOD_SUCCESS), "method parse_command return -1. called from 'main.c'");
 
+	command_print(p_command);
+	command_free(p_command);
 	free(line);
 	getchar();
 	return EXIT_SUCCESS;

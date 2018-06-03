@@ -149,6 +149,8 @@ int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length
 	arguments->address = (char*)malloc(sizeof(char)*arguments->address_size);
 	result = strncpy_s(arguments->address, arguments->address_size, input+index_array[0] + 1, arguments->address_size-1);
 	if (result != 0) {
+		free(arguments->address);
+		free(arguments);
 		return METHOD_FAILURE;
 	}
 	arguments->address[arguments->address_size - 1] = '\0';
@@ -167,6 +169,8 @@ int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length
 	//numberOfRooms
 	long_from_string = strtol(input + index_array[2] + 2, &p_char_after_number, 10);
 	if (*p_char_after_number != ' ' || long_from_string < 0 || long_from_string > INT_MAX) {
+		free(arguments->address);
+		free(arguments);
 		return METHOD_FAILURE;
 	}
 	arguments->numberOfRooms = (int)long_from_string;
@@ -175,6 +179,8 @@ int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length
 	//day
 	long_from_string = strtol(input + index_array[3] + 2, &p_char_after_number, 10);
 	if (*p_char_after_number != ' ' || long_from_string < 0 || long_from_string > INT_MAX) {
+		free(arguments->address);
+		free(arguments);
 		return METHOD_FAILURE;
 	}
 	arguments->day = (int)long_from_string;
@@ -183,6 +189,8 @@ int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length
 	//month
 	long_from_string = strtol(input + index_array[4] + 2, &p_char_after_number, 10);
 	if (*p_char_after_number != ' ' || long_from_string < 0 || long_from_string > INT_MAX) {
+		free(arguments->address);
+		free(arguments);
 		return METHOD_FAILURE;
 	}
 	arguments->month = (int)long_from_string;
@@ -192,10 +200,14 @@ int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length
 	long_from_string = strtol(input + index_array[5] + 2, &p_char_after_number, 10);
 	int is_invalid_char = (*p_char_after_number != ' ') && (*p_char_after_number != '\n') && (*p_char_after_number != '\0');
 	if (is_invalid_char || long_from_string < 0 || long_from_string > INT_MAX) {
+		free(arguments->address);
+		free(arguments);
 		return METHOD_FAILURE;
 	}
 	arguments->year = (int)long_from_string;
 	printf("\nyear is %d\n", arguments->year);
+
+	output->arguments = arguments;
 
 	return METHOD_SUCCESS;
 }
