@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "commands.h"
+#include "errors.h"
 
 int parse_command(char* line, size_t line_max_length, struct command* result);
 
