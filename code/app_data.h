@@ -1,0 +1,18 @@
+#ifndef APP_DATA_H_
+#define APP_DATA_H_
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "errors.h"
+#include "apartments.h"
+
+
+typedef struct appDATA
+{
+	struct aptList* apartments;
+}appDATA;
+
+int app_data_init(struct appDATA* p_app_data);
+int app_data_free(struct appDATA* p_app_data);
+
+#endif

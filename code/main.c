@@ -1,3 +1,4 @@
+#include "app_data.h"
 #include "ui.h"
 #include "parser.h"
 #include "commands.h"
@@ -8,6 +9,10 @@ int main()
 {
 	int result = 0;
 	size_t line_max_length = 1024;
+
+	appDATA* p_app_data = malloc(sizeof(appDATA));
+	error_if_condition_true_print_and_exit((p_app_data == NULL), "malloc return NULL on 'p_app_data' in 'main.c'");
+	app_data_init(p_app_data);
 
 	char *line = malloc(sizeof(char)*line_max_length);
 	error_if_condition_true_print_and_exit((line == NULL), "malloc return NULL on 'line' in 'main.c'");
@@ -24,6 +29,7 @@ int main()
 	command_print(p_command);
 	command_free(p_command);
 	free(line);
+	app_data_free(p_app_data);
 	getchar();
 	return EXIT_SUCCESS;
 }
