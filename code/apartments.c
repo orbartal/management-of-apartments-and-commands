@@ -10,7 +10,7 @@ void apartments_print_one_node(struct ListNode* input) {
 }
 void apartments_print_one_apartment(struct Apartment* input) {
 	printf("\napartments_print_one:\n");
-	printf("\naddress_code is %d\n", input->code);
+	printf("\ncode is %d\n", input->code);
 	printf("\naddress_size is %d\n", input->address_size);
 	printf("\naddress is %s\n", input->address);
 	printf("\nprice is %d\n", input->price);
