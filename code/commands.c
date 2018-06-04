@@ -2,6 +2,7 @@
 
 void command_print_add_apartment_command(struct AddApartmentCommand* input);
 int command_add_apartment_execute(struct AppDATA* p_app_data, struct AddApartmentCommand* p_command);
+int command_buy_apartment_execute(struct AppDATA* p_app_data, struct BuyApartmentCommand* p_command);
 
 int command_free(struct Command* input) {
 	if (input->type == CommandTypeAddApartment) {
@@ -37,6 +38,14 @@ int command_execute(struct AppDATA* p_app_data, struct Command* command) {
 		apartments_print_entire_list(p_app_data->apartments);
 		return METHOD_SUCCESS;
 	}
+	if (command->type == CommandTypeBuyApartment) {
+		command_buy_apartment_execute(p_app_data, command->arguments);
+		return METHOD_SUCCESS;
+	}
+	if (command->type == CommandTypeDeleteApartment) {
+		//TODO
+		return METHOD_SUCCESS;
+	}
 	if (command->type == CommandTypeAddExit) {
 		//TODO
 		return METHOD_SUCCESS;
@@ -63,5 +72,10 @@ int command_add_apartment_execute(struct AppDATA* p_app_data, struct AddApartmen
 	p_new_apt->month = p_command->month;
 	p_new_apt->year = p_command->year;
 	apartments_add_new_apartment(p_new_apt, p_app_data->apartments);
+	return METHOD_SUCCESS;
+}
+
+int command_buy_apartment_execute(struct AppDATA* p_app_data, struct BuyApartmentCommand* p_command) {
+	apartments_buy_apartment_with_code(p_app_data->apartments, p_command->code);
 	return METHOD_SUCCESS;
 }

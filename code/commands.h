@@ -9,6 +9,8 @@
 
 enum CommandType {
 	CommandTypeAddApartment,
+	CommandTypeBuyApartment,
+	CommandTypeDeleteApartment,
 	CommandTypeGetApartments,
 	CommandTypeAddExit
 };
@@ -29,6 +31,11 @@ typedef struct AddApartmentCommand
 	short int month;
 	short int year;
 }AddApartmentCommand;
+
+typedef struct BuyApartmentCommand
+{
+	int code;
+}BuyApartmentCommand;
 
 int command_free(struct Command* input);
 void command_print(struct Command* input);

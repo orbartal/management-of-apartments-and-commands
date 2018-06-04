@@ -5,7 +5,8 @@ int arguments_index_in_command_line(char* input, size_t input_max_length, size_t
 int set_command_type(char* input, size_t input_max_length, size_t* index_array, struct Command* output);
 enum CommandType get_command_type_by_command_name(char* command_name);
 int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
-int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
+int parse_and_set_add_apartment_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
+int parse_and_set_buy_apartment_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
 
 int parse_command (char* input, size_t input_max_length, struct Command* p_output) {
 	int result = 0;
@@ -117,6 +118,12 @@ enum CommandType get_command_type_by_command_name(char* command_name) {
 	if (strcmp(command_name, "add-an-apt") == 0) {
 		return CommandTypeAddApartment;
 	}
+	if (strcmp(command_name, "buy-an-apt") == 0) {
+		return CommandTypeBuyApartment;
+	}
+	if (strcmp(command_name, "delete-an-apt") == 0) {
+		return CommandTypeDeleteApartment;
+	}
 	if (strcmp(command_name, "get-an-apt") == 0) {
 		return CommandTypeGetApartments;
 	}
@@ -128,7 +135,14 @@ enum CommandType get_command_type_by_command_name(char* command_name) {
 
 int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* p_output) {
 	if (p_output->type == CommandTypeAddApartment) {
-		parse_and_set_add_app_command_arguments(input, input_max_length, index_array, index_array_length, p_output);
+		parse_and_set_add_apartment_command_arguments(input, input_max_length, index_array, index_array_length, p_output);
+		return METHOD_SUCCESS;
+	}
+	if (p_output->type == CommandTypeBuyApartment) {
+		parse_and_set_buy_apartment_command_arguments(input, input_max_length, index_array, index_array_length, p_output);
+		return METHOD_SUCCESS;
+	}
+	if (p_output->type == CommandTypeDeleteApartment) {
 		return METHOD_SUCCESS;
 	}
 	if (p_output->type == CommandTypeGetApartments) {
@@ -140,7 +154,7 @@ int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t
 	return METHOD_FAILURE;
 }
 
-int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* p_output) {
+int parse_and_set_add_apartment_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* p_output) {
 	int result = 0;
 	if (index_array_length!=7) {
 		return METHOD_FAILURE; //Wrong number of arguments for this command.
@@ -207,5 +221,26 @@ int parse_and_set_add_app_command_arguments(char* input, size_t input_max_length
 
 	p_output->arguments = arguments;
 
+	return METHOD_SUCCESS;
+}
+
+int parse_and_set_buy_apartment_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output) {
+	int result = 0;
+	if (index_array_length != 2) {
+		return METHOD_FAILURE; //Wrong number of arguments for this command.
+	}
+	struct BuyApartmentCommand* arguments = NULL;
+	arguments = (struct BuyApartmentCommand*)malloc(sizeof(struct BuyApartmentCommand));
+	error_if_condition_true_print_and_exit((arguments == NULL), "malloc return NULL on 'arguments' in 'parser.c'");
+
+	char *p_char_after_number;
+	long long_from_string;
+	long_from_string = strtol(input + index_array[0]+2, &p_char_after_number, 10);
+	bool invalid_next_char = (*p_char_after_number != '\n') && (*p_char_after_number != ' ');
+	if (*p_char_after_number != '\n' || long_from_string < 0 || long_from_string > INT_MAX) {
+		return METHOD_FAILURE;
+	}
+	arguments->code = (int)long_from_string;
+	output->arguments = arguments;
 	return METHOD_SUCCESS;
 }

@@ -24,5 +24,6 @@ void apartments_print_one_node(struct ListNode* apartment);
 void apartments_print_one_apartment(struct Apartment* apartment);
 void apartments_print_entire_list(struct LinkedList* p_apartments_list);
 void apartments_add_new_apartment(struct Apartment* p_new_apartment, struct LinkedList* p_apartments_list);
+void apartments_buy_apartment_with_code(struct LinkedList* p_apartments_list, int code);
 
 #endif
