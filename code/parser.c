@@ -7,6 +7,7 @@ enum CommandType get_command_type_by_command_name(char* command_name);
 int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
 int parse_and_set_add_apartment_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
 int parse_and_set_buy_apartment_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
+int parse_and_set_get_apartments_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
 
 int parse_command (char* input, size_t input_max_length, struct Command* p_output) {
 	int result = 0;
@@ -146,6 +147,7 @@ int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t
 		return METHOD_SUCCESS;
 	}
 	if (p_output->type == CommandTypeGetApartments) {
+		parse_and_set_get_apartments_command_arguments(input, input_max_length, index_array, index_array_length, p_output);
 		return METHOD_SUCCESS;
 	}
 	if (p_output->type == CommandTypeAddExit) {
@@ -248,5 +250,33 @@ int parse_and_set_buy_apartment_command_arguments(char* input, size_t input_max_
 	}
 	arguments->code = (int)long_from_string;
 	output->arguments = arguments;
+	return METHOD_SUCCESS;
+}
+
+int parse_and_set_get_apartments_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output) {
+	int result = 0;;
+	struct GetApartmentsCommand* arguments = NULL;
+	arguments = (struct GetApartmentsCommand*)malloc(sizeof(struct GetApartmentsCommand));
+	error_if_condition_true_print_and_exit((arguments == NULL), "malloc return NULL on 'arguments' in 'parser.c'");
+	arguments->number_of_parameters = index_array_length - 1; //We can ignore the get-an-apt command itself.
+	arguments->parameters = (struct GetApartmentsCommand*)malloc(sizeof(char*)*index_array_length);
+	arguments->parameters[arguments->number_of_parameters] = '\0';
+	for (int i = 0; i < arguments->number_of_parameters; i++) {
+		int argument_length = index_array[i+1] - index_array[i];
+		arguments->parameters[i] = (char*)malloc(sizeof(char)*argument_length);
+		error_if_condition_true_print_and_exit((arguments->parameters[i] == NULL), "malloc return NULL on 'arguments->parameters[i]' in 'parser.c'");
+		result = strncpy_s(arguments->parameters[i], argument_length, input + index_array[i]+2, argument_length-1);
+		if (result != 0) {
+			//free(arguments->address);
+			//TODO 
+			return METHOD_FAILURE;
+		}
+		arguments->parameters[i][argument_length-1] = '\0';
+	}
+	printf("GetApartmentsCommand.number_of_parameters = %d\n", arguments->number_of_parameters);
+	for (int i = 0; i < arguments->number_of_parameters; i++) {
+		char* str = arguments->parameters[i];
+		printf("%d: arguments->parameters[i]=%s\n", i, str);
+	}
 	return METHOD_SUCCESS;
 }

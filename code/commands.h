@@ -37,6 +37,12 @@ typedef struct BuyApartmentCommand
 	int code;
 }BuyApartmentCommand;
 
+typedef struct GetApartmentsCommand
+{
+	int number_of_parameters;
+	char** parameters;
+}GetApartmentsCommand;
+
 int command_free(struct Command* input);
 void command_print(struct Command* input);
 int command_execute(struct AppDATA* appData, struct Command* command);
