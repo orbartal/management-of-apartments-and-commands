@@ -163,16 +163,22 @@ int parse_and_set_add_apartment_command_arguments(char* input, size_t input_max_
 	arguments = (struct AddApartmentCommand*)malloc(sizeof(struct AddApartmentCommand));
 	error_if_condition_true_print_and_exit((arguments == NULL), "malloc return NULL on 'arguments' in 'parser.c'");
 
-	arguments->address_size = index_array[1] - index_array[0] + 1;
+	//Calculate address index in input without quotation marks.
+	size_t address_quotation_index_1 = index_array[0]+2;
+	size_t address_quotation_index_2 = index_array[1];
+	size_t address_start_index = address_quotation_index_1 + 1;
+	size_t address_end_index = address_quotation_index_2 - 1;
+	//set address_size and address
+	arguments->address_size = address_end_index - address_start_index + 2; //+1 for zero index and +1 for '\n'
 	arguments->address = (char*)malloc(sizeof(char)*arguments->address_size);
-	result = strncpy_s(arguments->address, arguments->address_size, input+index_array[0] + 1, arguments->address_size-1);
+	result = strncpy_s(arguments->address, arguments->address_size+1, input+ address_start_index, arguments->address_size);
 	if (result != 0) {
 		free(arguments->address);
 		free(arguments);
 		return METHOD_FAILURE;
 	}
-	arguments->address[arguments->address_size - 1] = '\0';
-
+	arguments->address[arguments->address_size-1] = '\0';
+	//set all other numeric values of add command
 	char *p_char_after_number;
 	long long_from_string;
 	//price

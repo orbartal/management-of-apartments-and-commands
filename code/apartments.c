@@ -12,15 +12,13 @@ void apartments_print_one_node(struct ListNode* input) {
 	apartments_print_one_apartment(apartment);
 }
 void apartments_print_one_apartment(struct Apartment* input) {
-	printf("\napartments_print_one:\n");
-	printf("\ncode is %d\n", input->code);
-	printf("\naddress_size is %d\n", input->address_size);
-	printf("\naddress is %s\n", input->address);
-	printf("\nprice is %d\n", input->price);
-	printf("\nnumberOfRooms is %d\n", input->number_Of_rooms);
-	printf("\nday is %d\n", input->day);
-	printf("\nmonth is %d\n", input->month);
-	printf("\nyear is %d\n", input->year);
+	printf("Apt details:\n");
+	printf("Code: %d\n", input->code);
+	printf("Address: %s\n", input->address);
+	printf("Number of rooms: %d\n", input->number_Of_rooms);
+	printf("Price: %d\n", input->price);
+	printf("Entry date: %d.%d.%d\n", input->day, input->month, input->year);
+	printf("Database entry date: %d.%d.%d\n", input->day, input->month, input->year);//TODO
 }
 
 void apartments_add_new_apartment(struct Apartment* p_new_apartment, struct LinkedList* p_apartments_list) {
