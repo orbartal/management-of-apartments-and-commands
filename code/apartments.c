@@ -3,7 +3,7 @@
 //Define private methods. Will be used only by methods in this c file. Unknown outside of it.
 bool apartments_predict_with_code(struct ListNode* p_node, int* p_code);
 
-//print
+//Print to console
 void apartments_print_one_apartment(struct Apartment* input) {
 	printf("Apt details:\n");
 	printf("Code: %d\n", input->code);

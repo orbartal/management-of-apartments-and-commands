@@ -1,12 +1,13 @@
 #ifndef APP_DATA_H_
 #define APP_DATA_H_
 
+//Includes
 #include <stdio.h>
 #include <stdlib.h>
 #include "errors.h"
 #include "apartments.h"
 
-
+//struct: AppDATA
 typedef struct AppDATA
 {
 	int last_apartment_code;

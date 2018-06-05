@@ -7,7 +7,8 @@
 #include <stdbool.h>
 #include "errors.h"
 
-//structs: list node and a list of nodes
+//structs: list node and a list of nodes. 
+//The data structure is abstract and no nothing on command an apartment.
 typedef struct ListNode
 {
 	void* data;

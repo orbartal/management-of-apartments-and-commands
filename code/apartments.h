@@ -8,7 +8,7 @@
 #include "errors.h"
 #include "list.h"
 
-//struct: Apartment
+//struct Apartment represt one apartment for sale.
 typedef struct Apartment
 {
 	int code;
