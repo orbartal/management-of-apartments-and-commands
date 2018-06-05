@@ -17,6 +17,7 @@ typedef struct ListNode
 
 typedef struct LinkedList
 {
+	int size; //Used only for debug.
 	ListNode* head;
 	ListNode* tail;
 }LinkedList;
@@ -29,6 +30,6 @@ void list_for_each (struct LinkedList* p_list, void(*action)(struct ListNode*));
 void list_filter_by_predict(struct LinkedList* p_list_input, struct LinkedList* p_list_output, void* predict_data, bool(*predict)(struct ListNode*, void*));
 struct ListNode* list_find_node_by_predict(struct LinkedList* p_list_input, void* predict_data, bool(*predict)(struct ListNode*, void*));
 void list_remove_node_from_list(struct LinkedList* p_list_input, ListNode* p_node);
-
+void list_init_node(struct ListNode* p_node, struct ListNode* p_node_prev, void* data, struct ListNode* p_node_next);
 
 #endif

@@ -3,6 +3,8 @@
 void command_print_add_apartment_command(struct AddApartmentCommand* input);
 int command_add_apartment_execute(struct AppDATA* p_app_data, struct AddApartmentCommand* p_command);
 int command_buy_apartment_execute(struct AppDATA* p_app_data, struct BuyApartmentCommand* p_command);
+//bool(*predict)(struct ListNode*, void*)
+bool command_predict_apartment_price_and_number_of_rooms(struct ListNode* p_node, GetApartmentsCommand* command);
 
 int command_free(struct Command* input) {
 	if (input->type == CommandTypeAddApartment) {
@@ -35,7 +37,14 @@ int command_execute(struct AppDATA* p_app_data, struct Command* command) {
 		return METHOD_SUCCESS;
 	}
 	if (command->type == CommandTypeGetApartments) {
-		apartments_print_entire_list(p_app_data->apartments);
+		LinkedList* original_list = p_app_data->apartments;
+		LinkedList* filter_list = NULL;
+		filter_list = malloc(sizeof(LinkedList));
+		error_if_condition_true_print_and_exit((filter_list == NULL), "malloc return NULL on 'filter_list' in 'commands.c'");
+		list_init_empty(filter_list);
+		list_filter_by_predict(original_list, filter_list, command->arguments, command_predict_apartment_price_and_number_of_rooms);
+		apartments_print_entire_list(filter_list);
+		//TODO: free memory of list
 		return METHOD_SUCCESS;
 	}
 	if (command->type == CommandTypeBuyApartment) {
@@ -78,4 +87,22 @@ int command_add_apartment_execute(struct AppDATA* p_app_data, struct AddApartmen
 int command_buy_apartment_execute(struct AppDATA* p_app_data, struct BuyApartmentCommand* p_command) {
 	apartments_buy_apartment_with_code(p_app_data->apartments, p_command->code);
 	return METHOD_SUCCESS;
+}
+
+void command_init_get_apartments_command(struct GetApartmentsCommand* input) {
+	input->min_rooms = 0;
+	input->max_rooms = INT_MAX;
+	input->min_price = 0;
+	input->max_price = INT_MAX;
+	input->sort_type = SortTypeNoSort;
+}
+
+bool command_predict_apartment_price_and_number_of_rooms(struct ListNode* p_node, GetApartmentsCommand* command) {
+	Apartment* apartment = (Apartment*) p_node->data;
+	bool max_price = (command->max_price >= apartment->price);
+	bool min_price = (command->min_price <= apartment->price);
+	bool max_rooms = (command->max_rooms >= apartment->number_Of_rooms);
+	bool min_rooms = (command->min_rooms <= apartment->number_Of_rooms);
+	bool result = (max_price && min_price && max_rooms && min_rooms);
+	return result;
 }

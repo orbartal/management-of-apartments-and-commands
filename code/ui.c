@@ -17,3 +17,8 @@ int ui_read_command(char* p_line, size_t line_max_length) {
 	}
 	return METHOD_SUCCESS;
 }
+
+int ui_warning_message(char* p_message) {
+	printf("%s\n", p_message);
+	return METHOD_SUCCESS;
+}

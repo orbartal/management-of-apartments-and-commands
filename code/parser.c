@@ -8,6 +8,10 @@ int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t
 int parse_and_set_add_apartment_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
 int parse_and_set_buy_apartment_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
 int parse_and_set_get_apartments_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
+int parse_get_apartments_command_arguments_to_array(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, char** output);
+int parse_and_set_apartments_command_arguments_from_array(char** parameters, size_t number_of_parameters, struct GetApartmentsCommand* output);
+int parse_and_set_apartments_command_int_arguments_by_name_and_value(char* parameter_name, char* parameter_value, struct GetApartmentsCommand* output);
+
 
 int parse_command (char* input, size_t input_max_length, struct Command* p_output) {
 	int result = 0;
@@ -131,7 +135,7 @@ enum CommandType get_command_type_by_command_name(char* command_name) {
 	if (strcmp(command_name, "exit") == 0) {
 		return CommandTypeAddExit;
 	}
-	return METHOD_FAILURE;
+	return CommandTypeUnknown;
 }
 
 int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* p_output) {
@@ -147,10 +151,14 @@ int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t
 		return METHOD_SUCCESS;
 	}
 	if (p_output->type == CommandTypeGetApartments) {
+		//TODO: uncomment
 		parse_and_set_get_apartments_command_arguments(input, input_max_length, index_array, index_array_length, p_output);
 		return METHOD_SUCCESS;
 	}
 	if (p_output->type == CommandTypeAddExit) {
+		return METHOD_SUCCESS;
+	}
+	if (p_output->type == CommandTypeUnknown) {
 		return METHOD_SUCCESS;
 	}
 	return METHOD_FAILURE;
@@ -254,29 +262,95 @@ int parse_and_set_buy_apartment_command_arguments(char* input, size_t input_max_
 }
 
 int parse_and_set_get_apartments_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output) {
-	int result = 0;;
+	//Read params from input to parameters 2d array
+	char** parameters = (char**)malloc(sizeof(char*)*index_array_length);
+	parameters[index_array_length-1] = '\0';
+	parse_get_apartments_command_arguments_to_array(input, input_max_length, index_array, index_array_length, parameters);
+	//Read params from parameters 2d array to struct GetApartmentsCommand* arguments
 	struct GetApartmentsCommand* arguments = NULL;
 	arguments = (struct GetApartmentsCommand*)malloc(sizeof(struct GetApartmentsCommand));
 	error_if_condition_true_print_and_exit((arguments == NULL), "malloc return NULL on 'arguments' in 'parser.c'");
-	arguments->number_of_parameters = index_array_length - 1; //We can ignore the get-an-apt command itself.
-	arguments->parameters = (struct GetApartmentsCommand*)malloc(sizeof(char*)*index_array_length);
-	arguments->parameters[arguments->number_of_parameters] = '\0';
-	for (int i = 0; i < arguments->number_of_parameters; i++) {
-		int argument_length = index_array[i+1] - index_array[i];
-		arguments->parameters[i] = (char*)malloc(sizeof(char)*argument_length);
-		error_if_condition_true_print_and_exit((arguments->parameters[i] == NULL), "malloc return NULL on 'arguments->parameters[i]' in 'parser.c'");
-		result = strncpy_s(arguments->parameters[i], argument_length, input + index_array[i]+2, argument_length-1);
+	parse_and_set_apartments_command_arguments_from_array(parameters, (index_array_length - 1), arguments);
+	//Return the value
+	output->arguments = arguments;
+	return METHOD_SUCCESS;
+}
+
+int parse_get_apartments_command_arguments_to_array(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, char** output) {
+	int number_of_parameters = index_array_length - 1;
+	for (int i = 0; i < number_of_parameters; i++) {
+		int argument_length = index_array[i + 1] - index_array[i];
+		output[i] = (char*)malloc(sizeof(char)*argument_length);
+		error_if_condition_true_print_and_exit((output[i] == NULL), "malloc return NULL on 'arguments->parameters[i]' in 'parser.c'");
+		int result = strncpy_s(output[i], argument_length, input + index_array[i] + 2, argument_length - 1);
 		if (result != 0) {
 			//free(arguments->address);
 			//TODO 
 			return METHOD_FAILURE;
 		}
-		arguments->parameters[i][argument_length-1] = '\0';
+		output[i][argument_length - 1] = '\0';
 	}
-	printf("GetApartmentsCommand.number_of_parameters = %d\n", arguments->number_of_parameters);
-	for (int i = 0; i < arguments->number_of_parameters; i++) {
-		char* str = arguments->parameters[i];
+	/*
+	printf("1) GetApartmentsCommand.number_of_parameters = %d\n", number_of_parameters);
+	for (int i = 0; i < number_of_parameters; i++) {
+		char* str = output[i];
 		printf("%d: arguments->parameters[i]=%s\n", i, str);
+	}
+	*/
+	return METHOD_SUCCESS;
+}
+
+int parse_and_set_apartments_command_arguments_from_array(char** parameters, size_t number_of_parameters, struct GetApartmentsCommand* output) {
+	command_init_get_apartments_command(output);
+	for (size_t i = 0; i < number_of_parameters; i++) {
+		char* parameter_name = parameters[i];
+		if (i < (number_of_parameters - 1)) {
+			int result = parse_and_set_apartments_command_int_arguments_by_name_and_value(parameter_name, parameters[i + 1], output);
+			if (result!= METHOD_SUCCESS) {
+				return METHOD_FAILURE;
+			}
+			if (strcmp(parameter_name, "-s") == 0) {
+				output->sort_type = SortTypeByPriceLowToHigh;
+			}
+			if (strcmp(parameter_name, "-sr") == 0) {
+				output->sort_type = SortTypeByPriceHighToLow;
+			}
+		}
 	}
 	return METHOD_SUCCESS;
 }
+
+int parse_and_set_apartments_command_int_arguments_by_name_and_value(char* parameter_name, char* parameter_value, struct GetApartmentsCommand* output) {
+	char *p_char_after_number;
+	long long_from_string;
+	if (strcmp(parameter_name, "-MinimumNumRooms") == 0) {
+		long_from_string = strtol(parameter_value, &p_char_after_number, 10);
+		if (long_from_string < 0 || long_from_string > INT_MAX) {
+			return METHOD_FAILURE;
+		}
+		output->min_rooms = (int)long_from_string;
+	}
+	if (strcmp(parameter_name, "-MaximumNumRooms") == 0) {
+		long_from_string = strtol(parameter_value, &p_char_after_number, 10);
+		if (long_from_string < 0 || long_from_string > INT_MAX) {
+			return METHOD_FAILURE;
+		}
+		output->max_rooms = (int)long_from_string;
+	}
+	if (strcmp(parameter_name, "–MinimumPrice") == 0) {
+		long_from_string = strtol(parameter_value, &p_char_after_number, 10);
+		if (long_from_string < 0 || long_from_string > INT_MAX) {
+			return METHOD_FAILURE;
+		}
+		output->min_price = (int)long_from_string;
+	}
+	if (strcmp(parameter_name, "-MaximumPrice") == 0) {
+		long_from_string = strtol(parameter_value, &p_char_after_number, 10);
+		if (long_from_string < 0 || long_from_string > INT_MAX) {
+			return METHOD_FAILURE;
+		}
+		output->max_price = (int)long_from_string;
+	}
+	return METHOD_SUCCESS;
+}
+

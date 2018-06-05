@@ -24,10 +24,13 @@ int main()
 	while (p_command->type!= CommandTypeAddExit) {
 		result = ui_read_command(p_line, line_max_length);
 		error_if_condition_true_print_and_exit((result != METHOD_SUCCESS), "method ui_read_command return -1. called from 'main.c'");
-
+		
 		result = parse_command(p_line, line_max_length, p_command);
 		error_if_condition_true_print_and_exit((result != METHOD_SUCCESS), "method parse_command return -1. called from 'main.c'");
-
+		if (p_command->type== CommandTypeUnknown) {
+			ui_warning_message("Did not execute unknwon command");
+			continue;
+		}
 		command_execute(p_app_data, p_command);
 	}
 	free(p_line);

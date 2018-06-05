@@ -1,6 +1,7 @@
 #include "list.h"
 
 void list_init_empty(struct LinkedList* p_list) {
+	p_list->size = 0; 
 	p_list->head = NULL;
 	p_list->tail = NULL;
 }
@@ -24,6 +25,7 @@ void list_insert_node_to_list_end(struct ListNode* p_node, struct LinkedList* p_
 		p_list->tail->next = p_node;
 		p_list->tail = p_node;
 	}
+	p_list->size++;
 }
 
 void list_for_each(struct LinkedList* p_list, void(*action)(struct ListNode*)) {
@@ -38,7 +40,10 @@ void list_filter_by_predict(struct LinkedList* p_list_input, struct LinkedList* 
 	ListNode* p_node = p_list_input->head;
 	while (p_node != NULL) {
 		if (predict(p_node, predict_data)==true) {
-			list_insert_node_to_list_end(p_node, p_list_output);
+			struct ListNode* p_new_node = malloc(sizeof(struct ListNode));
+			error_if_condition_true_print_and_exit((p_new_node == NULL), "malloc return NULL on 'p_new_node' in 'list.c'");
+			list_init_node(p_new_node, NULL, p_node->data, NULL);
+			list_insert_node_to_list_end(p_new_node, p_list_output);
 		}
 		p_node = p_node->next;
 	}
@@ -75,4 +80,11 @@ void list_remove_node_from_list(struct LinkedList* p_list_input, ListNode* p_nod
 		p_list_input->head = NULL;
 		p_list_input->tail = NULL;
 	}
+	p_list_input->size--;
+}
+
+void list_init_node(struct ListNode* p_node, struct ListNode* p_node_prev, void* data, struct ListNode* p_node_next) {
+	p_node->prev = p_node_prev;
+	p_node->data = data;
+	p_node->next = p_node_next;
 }
