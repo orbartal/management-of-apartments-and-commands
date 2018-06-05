@@ -108,6 +108,6 @@ int command_get_apartments_execute(struct AppDATA* p_app_data, struct GetApartme
 	list_init_empty(filter_list);
 	list_filter_by_predict(original_list, filter_list, p_command, command_predict_apartment_price_and_number_of_rooms);
 	apartments_print_entire_list(filter_list);
-	//TODO: free memory of list
+	list_free_list_and_all_nodes_but_not_data(filter_list);
 	return METHOD_SUCCESS;
 }

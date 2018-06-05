@@ -5,8 +5,30 @@ void list_init_empty(struct LinkedList* p_list) {
 	p_list->head = NULL;
 	p_list->tail = NULL;
 }
+
 void list_free(struct LinkedList* p_list) {
 	//TODO
+}
+
+void list_free_list_and_all_nodes_but_not_data(struct LinkedList* p_list) {
+	ListNode* p_node = p_list->head, *p_node_next = NULL;
+	while (p_node != NULL) {
+		p_node_next = p_node->next;
+		free(p_node);
+		p_node = p_node_next;
+	}
+	free(p_list);
+}
+
+void list_free_list_and_all_nodes_and_data(struct LinkedList* p_list) {
+	ListNode* p_node = p_list->head, *p_node_next = NULL;
+	while (p_node != NULL) {
+		p_node_next = p_node->next;
+		free(p_node->data);
+		free(p_node);
+		p_node = p_node_next;
+	}
+	free(p_list);
 }
 
 void list_insert_node_to_list_end(struct ListNode* p_node, struct LinkedList* p_list){

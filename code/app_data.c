@@ -9,7 +9,7 @@ int app_data_init(struct AppDATA* p_app_data) {
 }
 
 int app_data_free(struct AppDATA* p_app_data) {
-	list_free(p_app_data->apartments);
+	list_free_list_and_all_nodes_and_data(p_app_data->apartments);
 	free(p_app_data);
 	return METHOD_SUCCESS;
 }
