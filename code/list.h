@@ -37,6 +37,5 @@ void list_for_each(struct LinkedList* p_list, void(*action)(struct ListNode*));
 
 //Complicate methods that use the genric methods o(n)
 void list_free_list_and_all_nodes_but_not_data(struct LinkedList* p_list);
-void list_free_list_and_all_nodes_and_data(struct LinkedList* p_list);
 
 #endif

@@ -20,7 +20,9 @@ typedef struct Apartment
 	short int year;
 }Apartment;
 
-void apartments_print_one_node(struct ListNode* apartment);
+void apartments_free_one_apartment_in_node(struct ListNode* node);
+void apartments_free_one_apartment(struct Apartment* apartment);
+void apartments_print_one_node(struct ListNode* node);
 void apartments_print_one_apartment(struct Apartment* apartment);
 void apartments_print_entire_list(struct LinkedList* p_apartments_list);
 void apartments_add_new_apartment(struct Apartment* p_new_apartment, struct LinkedList* p_apartments_list);

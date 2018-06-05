@@ -9,7 +9,10 @@ int app_data_init(struct AppDATA* p_app_data) {
 }
 
 int app_data_free(struct AppDATA* p_app_data) {
-	list_free_list_and_all_nodes_and_data(p_app_data->apartments);
+	//Free all apartments in list, e.g. list data.
+	list_for_each(p_app_data->apartments, apartments_free_one_apartment_in_node);
+	//Free the nodes and the list itself.
+	list_free_list_and_all_nodes_but_not_data(p_app_data->apartments);
 	free(p_app_data);
 	return METHOD_SUCCESS;
 }

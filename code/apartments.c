@@ -42,3 +42,11 @@ bool apartments_predict_with_code(struct ListNode* p_node, int* p_code) {
 	int code2 = *p_code;
 	return code1 == code2;
 }
+
+void apartments_free_one_apartment(struct Apartment* apartment) {
+	//TODO
+}
+
+void apartments_free_one_apartment_in_node(struct ListNode* node) {
+	apartments_free_one_apartment(node->data);
+}

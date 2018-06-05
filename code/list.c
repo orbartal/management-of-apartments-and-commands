@@ -82,31 +82,16 @@ void list_filter_by_predict(struct LinkedList* p_list_input, struct LinkedList* 
 }
 
 void list_for_each(struct LinkedList* p_list, void(*action)(struct ListNode*)) {
-	ListNode* p_node = p_list->head;
+	ListNode* p_node = p_list->head, *p_node_next = NULL;
 	while (p_node != NULL) {
+		p_node_next = p_node->next;
 		action(p_node);
-		p_node = p_node->next;
+		p_node = p_node_next;
 	}
 }
 
 //Complicate methods that use the genric methods o(n)
 void list_free_list_and_all_nodes_but_not_data(struct LinkedList* p_list) {
-	ListNode* p_node = p_list->head, *p_node_next = NULL;
-	while (p_node != NULL) {
-		p_node_next = p_node->next;
-		free(p_node);
-		p_node = p_node_next;
-	}
-	free(p_list);
-}
-
-void list_free_list_and_all_nodes_and_data(struct LinkedList* p_list) {
-	ListNode* p_node = p_list->head, *p_node_next = NULL;
-	while (p_node != NULL) {
-		p_node_next = p_node->next;
-		free(p_node->data);
-		free(p_node);
-		p_node = p_node_next;
-	}
+	list_for_each(p_list, free);
 	free(p_list);
 }
