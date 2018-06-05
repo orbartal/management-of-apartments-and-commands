@@ -1,16 +1,9 @@
 #include "apartments.h"
 
+//Define private methods. Will be used only by methods in this c file. Unknown outside of it.
 bool apartments_predict_with_code(struct ListNode* p_node, int* p_code);
 
-
-void apartments_print_entire_list(struct LinkedList* p_apartments_list) {
-	list_for_each(p_apartments_list, apartments_print_one_node);
-}
-
-void apartments_print_one_node(struct ListNode* input) {
-	struct Apartment* apartment = (struct Apartment*)input->data;
-	apartments_print_one_apartment(apartment);
-}
+//print
 void apartments_print_one_apartment(struct Apartment* input) {
 	printf("Apt details:\n");
 	printf("Code: %d\n", input->code);
@@ -21,6 +14,26 @@ void apartments_print_one_apartment(struct Apartment* input) {
 	printf("Database entry date: %d.%d.%d\n", input->day, input->month, input->year);//TODO
 }
 
+void apartments_print_one_node(struct ListNode* input) {
+	struct Apartment* apartment = (struct Apartment*)input->data;
+	apartments_print_one_apartment(apartment);
+}
+
+void apartments_print_entire_list(struct LinkedList* p_apartments_list) {
+	list_for_each(p_apartments_list, apartments_print_one_node);
+}
+
+//Free memory
+void apartments_free_one_apartment(struct Apartment* apartment) {
+	free(apartment->address);
+	free(apartment);
+}
+
+void apartments_free_one_apartment_in_node(struct ListNode* node) {
+	apartments_free_one_apartment(node->data);
+}
+
+//Change list: add or remove Apartment from list
 void apartments_add_new_apartment(struct Apartment* p_new_apartment, struct LinkedList* p_apartments_list) {
 	struct ListNode* p_node = NULL;
 	p_node = malloc(sizeof(struct ListNode));
@@ -41,12 +54,4 @@ bool apartments_predict_with_code(struct ListNode* p_node, int* p_code) {
 	int code1 = apartment->code;
 	int code2 = *p_code;
 	return code1 == code2;
-}
-
-void apartments_free_one_apartment(struct Apartment* apartment) {
-	//TODO
-}
-
-void apartments_free_one_apartment_in_node(struct ListNode* node) {
-	apartments_free_one_apartment(node->data);
 }
