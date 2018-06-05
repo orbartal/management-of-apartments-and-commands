@@ -1,48 +1,60 @@
 #include "parser.h"
 
+//Define private methods. Will be used only by methods in this c file. Unknown outside of it.
+
+//Used for all command.
 size_t count_arguments_in_command_line(char* input, size_t input_max_length);
 int arguments_index_in_command_line(char* input, size_t input_max_length, size_t* output, size_t output_length);
 int set_command_type(char* input, size_t input_max_length, size_t* index_array, struct Command* output);
 enum CommandType get_command_type_by_command_name(char* command_name);
 int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
+
+//Used only for one type of command.
 int parse_and_set_add_apartment_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
 int parse_and_set_buy_apartment_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
+//Used only for one type of command: get-an-apt
 int parse_and_set_get_apartments_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output);
 int parse_get_apartments_command_arguments_to_array(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, char** output);
 int parse_and_set_apartments_command_arguments_from_array(char** parameters, size_t number_of_parameters, struct GetApartmentsCommand* output);
 int parse_and_set_apartments_command_int_arguments_by_name_and_value(char* parameter_name, char* parameter_value, struct GetApartmentsCommand* output);
 
-
+//The only public method in parser. Translate the string command (from the console) to struct Command.
 int parse_command (char* input, size_t input_max_length, struct Command* p_output) {
+	//variables
 	int result = 0;
+	size_t number_of_arguments = 0;
 	size_t *arguments_index = NULL;
-	size_t number_of_arguments = count_arguments_in_command_line(input, input_max_length) + 1;
+
+	//Count the number of arguments in the input command string, and the index of the ast char of each argument.
+	number_of_arguments = count_arguments_in_command_line(input, input_max_length) + 1;
 	arguments_index = (size_t*)malloc(sizeof(size_t)*(number_of_arguments+1));
 	error_if_condition_true_print_and_exit((arguments_index == NULL), "malloc return NULL on 'arguments_index' in 'parser.c'");
 	arguments_index[number_of_arguments] = '\0';
-
 	result = arguments_index_in_command_line(input, input_max_length, arguments_index, number_of_arguments);
 	if (result != METHOD_SUCCESS) {
 		free(arguments_index);
 		return METHOD_FAILURE;
 	}
 
+	//Find the type of the command: add-an-apt, get-an-apt, buy-an-apt, delete-an-apt, ...
 	result =  set_command_type(input, input_max_length, arguments_index, p_output);
 	if (result != METHOD_SUCCESS) {
 		free(arguments_index);
 		return METHOD_FAILURE;
 	}
 
+	//Set all the struct commend arguments based on the command type and the arguments in the input string.
 	result =  parse_and_set_command_arguments(input, input_max_length, arguments_index, number_of_arguments, p_output);
 	if (result != METHOD_SUCCESS) {
 		free(arguments_index);
 		return METHOD_FAILURE;
 	}
-
+	//Free the memory we malloc in this method. In c we must free after every malloc to prevent memory leaks!
 	free(arguments_index);
 	return result;
 }
 
+//Private methods used only by the public method parse_command. But for every command from any type.
 size_t count_arguments_in_command_line(char* input, size_t input_max_length) {
 	size_t i = 0, k = 0, count = 0;
 	int inner_loop = 1, outer_loop = 1;
@@ -164,6 +176,7 @@ int parse_and_set_command_arguments(char* input, size_t input_max_length, size_t
 	return METHOD_FAILURE;
 }
 
+//Private methods used only by the public method parse_command. And each method is use for only on type of command.
 int parse_and_set_add_apartment_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* p_output) {
 	int result = 0;
 	if (index_array_length!=7) {
@@ -198,7 +211,7 @@ int parse_and_set_add_apartment_command_arguments(char* input, size_t input_max_
 	}
 	arguments->price = (int)long_from_string;
 
-	//numberOfRooms
+	//number_of_rooms
 	long_from_string = strtol(input + index_array[2] + 2, &p_char_after_number, 10);
 	if (*p_char_after_number != ' ' || long_from_string < 0 || long_from_string > INT_MAX) {
 		free(arguments->address);
@@ -262,17 +275,22 @@ int parse_and_set_buy_apartment_command_arguments(char* input, size_t input_max_
 }
 
 int parse_and_set_get_apartments_command_arguments(char* input, size_t input_max_length, size_t* index_array, size_t index_array_length, struct Command* output) {
-	//Read params from input to parameters 2d array
+	//Read params from input to a parameters 2d array
 	char** parameters = (char**)malloc(sizeof(char*)*index_array_length);
 	parameters[index_array_length-1] = '\0';
 	parse_get_apartments_command_arguments_to_array(input, input_max_length, index_array, index_array_length, parameters);
+
 	//Read params from parameters 2d array to struct GetApartmentsCommand* arguments
 	struct GetApartmentsCommand* arguments = NULL;
 	arguments = (struct GetApartmentsCommand*)malloc(sizeof(struct GetApartmentsCommand));
 	error_if_condition_true_print_and_exit((arguments == NULL), "malloc return NULL on 'arguments' in 'parser.c'");
 	parse_and_set_apartments_command_arguments_from_array(parameters, (index_array_length - 1), arguments);
-	//Return the value
 	output->arguments = arguments;
+	
+	//Free the memory we malloc in this method. In c we must free after every malloc to prevent memory leaks!
+	for (int i = 0; i < index_array_length; i++) {
+		free(parameters[i]);
+	}
 	return METHOD_SUCCESS;
 }
 
@@ -290,13 +308,6 @@ int parse_get_apartments_command_arguments_to_array(char* input, size_t input_ma
 		}
 		output[i][argument_length - 1] = '\0';
 	}
-	/*
-	printf("1) GetApartmentsCommand.number_of_parameters = %d\n", number_of_parameters);
-	for (int i = 0; i < number_of_parameters; i++) {
-		char* str = output[i];
-		printf("%d: arguments->parameters[i]=%s\n", i, str);
-	}
-	*/
 	return METHOD_SUCCESS;
 }
 
@@ -353,4 +364,3 @@ int parse_and_set_apartments_command_int_arguments_by_name_and_value(char* param
 	}
 	return METHOD_SUCCESS;
 }
-
