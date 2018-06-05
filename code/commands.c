@@ -3,7 +3,7 @@
 void command_print_add_apartment_command(struct AddApartmentCommand* input);
 int command_add_apartment_execute(struct AppDATA* p_app_data, struct AddApartmentCommand* p_command);
 int command_buy_apartment_execute(struct AppDATA* p_app_data, struct BuyApartmentCommand* p_command);
-//bool(*predict)(struct ListNode*, void*)
+int command_get_apartments_execute(struct AppDATA* p_app_data, struct GetApartmentsCommand* p_command);
 bool command_predict_apartment_price_and_number_of_rooms(struct ListNode* p_node, GetApartmentsCommand* command);
 
 int command_free(struct Command* input) {
@@ -37,14 +37,7 @@ int command_execute(struct AppDATA* p_app_data, struct Command* command) {
 		return METHOD_SUCCESS;
 	}
 	if (command->type == CommandTypeGetApartments) {
-		LinkedList* original_list = p_app_data->apartments;
-		LinkedList* filter_list = NULL;
-		filter_list = malloc(sizeof(LinkedList));
-		error_if_condition_true_print_and_exit((filter_list == NULL), "malloc return NULL on 'filter_list' in 'commands.c'");
-		list_init_empty(filter_list);
-		list_filter_by_predict(original_list, filter_list, command->arguments, command_predict_apartment_price_and_number_of_rooms);
-		apartments_print_entire_list(filter_list);
-		//TODO: free memory of list
+		command_get_apartments_execute(p_app_data, command->arguments);
 		return METHOD_SUCCESS;
 	}
 	if (command->type == CommandTypeBuyApartment) {
@@ -105,4 +98,16 @@ bool command_predict_apartment_price_and_number_of_rooms(struct ListNode* p_node
 	bool min_rooms = (command->min_rooms <= apartment->number_Of_rooms);
 	bool result = (max_price && min_price && max_rooms && min_rooms);
 	return result;
+}
+
+int command_get_apartments_execute(struct AppDATA* p_app_data, struct GetApartmentsCommand* p_command) {
+	LinkedList* original_list = p_app_data->apartments;
+	LinkedList* filter_list = NULL;
+	filter_list = malloc(sizeof(LinkedList));
+	error_if_condition_true_print_and_exit((filter_list == NULL), "malloc return NULL on 'filter_list' in 'commands.c'");
+	list_init_empty(filter_list);
+	list_filter_by_predict(original_list, filter_list, p_command, command_predict_apartment_price_and_number_of_rooms);
+	apartments_print_entire_list(filter_list);
+	//TODO: free memory of list
+	return METHOD_SUCCESS;
 }
