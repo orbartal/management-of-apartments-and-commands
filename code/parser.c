@@ -320,12 +320,12 @@ int parse_and_set_apartments_command_arguments_from_array(char** parameters, siz
 			if (result!= METHOD_SUCCESS) {
 				return METHOD_FAILURE;
 			}
-			if (strcmp(parameter_name, "-s") == 0) {
-				output->sort_type = SortTypeByPriceLowToHigh;
-			}
-			if (strcmp(parameter_name, "-sr") == 0) {
-				output->sort_type = SortTypeByPriceHighToLow;
-			}
+		}
+		if (strcmp(parameter_name, "-s") == 0) {
+			output->sort_type = SortTypeByPriceLowToHigh;
+		}
+		if (strcmp(parameter_name, "-sr") == 0) {
+			output->sort_type = SortTypeByPriceHighToLow;
 		}
 	}
 	return METHOD_SUCCESS;

@@ -15,6 +15,7 @@ void command_print(struct Command* input) {
 
 //TODO: Some bug prevent me from free. Need to fix.
 int command_free(struct Command* input) {
+	/*
 	if (input->arguments != NULL && input->type != CommandTypeAddExit) {
 		if (input->type == CommandTypeAddApartment) {
 			struct AddApartmentCommand* p_add_apartment = input->arguments;
@@ -24,6 +25,7 @@ int command_free(struct Command* input) {
 		}
 		free(input->arguments);
 	}
+	*/
 	free(input);
 	return METHOD_SUCCESS;
 }
@@ -107,12 +109,29 @@ bool command_predict_apartment_price_and_number_of_rooms(struct ListNode* p_node
 
 int command_get_apartments_execute(struct AppDATA* p_app_data, struct GetApartmentsCommand* p_command) {
 	LinkedList* original_list = p_app_data->apartments;
-	LinkedList* filter_list = NULL;
-	filter_list = malloc(sizeof(LinkedList));
+
+	LinkedList* filter_list = malloc(sizeof(LinkedList));
 	error_if_condition_true_print_and_exit((filter_list == NULL), "malloc return NULL on 'filter_list' in 'commands.c'");
 	list_init_empty(filter_list);
 	list_filter_by_predict(original_list, filter_list, p_command, command_predict_apartment_price_and_number_of_rooms);
-	apartments_print_entire_list(filter_list);
+	
+	if (p_command->sort_type == SortTypeNoSort) {
+		apartments_print_entire_list(filter_list);
+	}
+	else {
+		LinkedList* sorted_list = malloc(sizeof(LinkedList));
+		error_if_condition_true_print_and_exit((sorted_list == NULL), "malloc return NULL on 'sorted_list' in 'commands.c'");
+		list_init_empty(sorted_list);
+		if (p_command->sort_type ==  SortTypeByPriceLowToHigh) {
+			list_sort_by_comparable(filter_list, sorted_list, apartments_comparable_by_price_low_to_high);
+			
+		}
+		else {//p_command->sort_type == SortTypeByPriceHighToLow
+			list_sort_by_comparable(filter_list, sorted_list, apartments_comparable_by_price_high_to_low);
+		}
+		apartments_print_entire_list(sorted_list);
+		list_free_list_and_all_nodes_but_not_data(sorted_list);
+	}
 	list_free_list_and_all_nodes_but_not_data(filter_list);
 	return METHOD_SUCCESS;
 }

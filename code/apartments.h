@@ -34,4 +34,7 @@ void apartments_free_one_apartment_in_node(struct ListNode* node);
 void apartments_add_new_apartment(struct Apartment* p_new_apartment, struct LinkedList* p_apartments_list);
 void apartments_buy_apartment_with_code(struct LinkedList* p_apartments_list, int code);
 
+//comparable
+bool apartments_comparable_by_price_low_to_high(struct ListNode* p_node_1, struct ListNode* p_node_2);
+bool apartments_comparable_by_price_high_to_low(struct ListNode* p_node_1, struct ListNode* p_node_2);
 #endif

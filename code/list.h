@@ -28,7 +28,7 @@ void list_init_node(struct ListNode* p_node, struct ListNode* p_node_prev, void*
 
 //Basic list actions o(1)
 void list_init_empty(struct LinkedList* p_list);
-void list_insert_node_to_list_end(struct ListNode* p_node, struct LinkedList* p_list);
+void list_insert_node_to_list_end(struct LinkedList* p_list, struct ListNode* p_node);
 void list_remove_node_from_list(struct LinkedList* p_list_input, ListNode* p_node);
 
 //Genric methods o(n)
@@ -38,5 +38,6 @@ void list_for_each(struct LinkedList* p_list, void(*action)(struct ListNode*));
 
 //Complicate methods that use the genric methods o(n)
 void list_free_list_and_all_nodes_but_not_data(struct LinkedList* p_list);
+void list_sort_by_comparable(struct LinkedList* p_list_input, struct LinkedList* p_list_output, bool(*comparable)(struct ListNode*, struct ListNode*));
 
 #endif

@@ -2,6 +2,8 @@
 
 //Define private methods. Will be used only by methods in this c file. Unknown outside of it.
 bool apartments_predict_with_code(struct ListNode* p_node, int* p_code);
+bool apartments_predict_is_seconde_price_higher(struct Apartment* p_apartment_1, struct Apartment* p_apartment_2);
+
 
 //Print to console
 void apartments_print_one_apartment(struct Apartment* input) {
@@ -41,7 +43,7 @@ void apartments_add_new_apartment(struct Apartment* p_new_apartment, struct Link
 	p_node->next = NULL;
 	p_node->prev = NULL;
 	p_node->data = p_new_apartment;
-	list_insert_node_to_list_end(p_node, p_apartments_list);
+	list_insert_node_to_list_end(p_apartments_list, p_node);
 }
 
 void apartments_buy_apartment_with_code(struct LinkedList* p_apartments_list, int code) {
@@ -54,4 +56,19 @@ bool apartments_predict_with_code(struct ListNode* p_node, int* p_code) {
 	int code1 = apartment->code;
 	int code2 = *p_code;
 	return code1 == code2;
+}
+
+bool apartments_comparable_by_price_low_to_high(struct ListNode* p_node_1, struct ListNode* p_node_2) {
+	return apartments_predict_is_seconde_price_higher(p_node_2->data, p_node_1->data);
+}
+
+//we shell assume the list is sorted from largest, head, to smallest, tail.
+//(struct ListNode*, p_new_node)
+
+bool apartments_comparable_by_price_high_to_low(struct ListNode* p_node_1, struct ListNode* p_node_2) {
+	return apartments_predict_is_seconde_price_higher(p_node_1->data, p_node_2->data);
+}
+
+bool apartments_predict_is_seconde_price_higher(struct Apartment* p_apartment_1, struct Apartment* p_apartment_2) {
+	return (p_apartment_1->price < p_apartment_2->price);
 }
