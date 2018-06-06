@@ -13,12 +13,15 @@ void command_print(struct Command* input) {
 	}
 }
 
+//TODO: Some bug prevent me from free. Need to fix.
 int command_free(struct Command* input) {
-	if (input->type == CommandTypeAddApartment) {
-		struct AddApartmentCommand* arguments = input->arguments;
-		free(arguments->address);
-	}
-	if (input->arguments!=NULL) {
+	if (input->arguments != NULL && input->type != CommandTypeAddExit) {
+		if (input->type == CommandTypeAddApartment) {
+			struct AddApartmentCommand* p_add_apartment = input->arguments;
+			if (p_add_apartment->address !=NULL) {
+				//free(p_add_apartment->address);
+			}
+		}
 		free(input->arguments);
 	}
 	free(input);
